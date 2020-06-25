@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_company_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@name='social_media']" position="before">
-                <group string="Access by IP" groups="base.group_no_one">
+                <group string="2 Factor Authentication" groups="base.group_no_one">
                     <field name="is_open_2fa"/>
                 </group>
             </xpath>
