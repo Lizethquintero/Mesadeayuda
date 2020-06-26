@@ -9,15 +9,20 @@
             <field name="subject">Security code.</field>
             <field name="body_html" type="html">
             <header>
-                <p style="font-size:30px">Security ${object.company_id.name}</p>
+                <p style="font-size:30px">Security ${object.company_id.name}
+                <img 
+                src="/logo.png?company=${object.company_id.id}" 
+                style="margin-left:15px;height: auto; width: 80px;" 
+                alt="${object.company_id.name}" 
+                class="float-right"/></p>
             </header>
             <p>
-                Hello ${object.name},<br/><br/>
-                This is your code: ${object.twoFA_code}
+                Hello ${object.name},<br/><br/></p>
+            <p style="text-align: center;"><font style="font-size:12px;"> This is your code:
+            </font><b><font style="font-size:16px;">${object.twoFA_code}</font></b>
             </p>
             <footer>
-                <p>Author: Hege Refsnes<br>
-                <a href="mailto:${object.company_id.email | safe}">${object.company_id.email | safe}</a></p>
+                <p>${object.company_id.email | safe}</p>
             </footer>
             </field>
         </record>
