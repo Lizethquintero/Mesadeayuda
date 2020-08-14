@@ -38,13 +38,21 @@ class WebHome(Home):
             values['databases'] = None
 
         if request.httprequest.method == 'POST':
-            # if values.get('send_mail') and values.get('send_mail') == "send":            
-            user = request.env['res.users'].sudo().search([('login','ilike',values['login'])])[0]
+            # if values.get('send_mail') and values.get('send_mail') == "send": 
+            user = request.env['res.users'].sudo().search([('login','ilike',values['login'])])
+            if user:        
+                user = request.env['res.users'].sudo().search([('login','ilike',values['login'])])[0]
+            else:
+                values = request.params.copy()
+                values['error'] = _("Wrong login")
+                response = request.render('web.login', values)
+                response.headers['X-Frame-Options'] = 'DENY'
+                return response
             if user.aut_type2FA == 'Email' and user.require_2FA:
                 user.twoFA_code = pyotp.random_base32()
                 template_id = request.env.ref('auth_2FA.user_auth_2fa_email').id
                 request.env['mail.template'].sudo().browse(template_id).send_mail(user.id, force_send=True)
-                values['text'] = _('A validation code has been sent to the registered email. Please enter it to continue')
+                values['text'] = _('A validation code has been sent to the registered email. Please use it to continue')
             old_uid = request.uid
             login_mail = request.params['login']
             mail_validation = re.match(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{0,10}", login_mail)
