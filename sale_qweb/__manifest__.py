@@ -31,6 +31,7 @@
         'reports/sale_report.xml',
         'reports/sale_report_template.xml',
         'views/sale_portal_templates.xml',
+        'views/sale_order_template_view.xml',
         # 'views/templates.xml',
     ],
     # only loaded in demonstration mode

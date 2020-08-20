@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="sale_order_our_company_template_view_form" model="ir.ui.view">
+        <field name="name">sale.order.our.company.template.form</field>
+        <field name="model">sale.order.template</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Quotation Template">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            Template for "Our Company"
+                        </h1>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="row">
+                        <group>
+                            <field name="name" string="Template Name"/>
+                        </group>
+                        <group>
+                            <field name="our_company_template"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sale_order_our_company_template_action" model="ir.actions.act_window">
+        <field name="name">Our Company Template</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.template</field>
+        <field name="view_mode">form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create our company template
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="sale_order_our_company_menu" action="sale_order_our_company_template_action" parent="sale.menu_sales_config" sequence="2" name="Our Company Template" groups="sale_management.group_sale_order_template" />
+
+</odoo>
