@@ -19,7 +19,7 @@
            </group>
          </xpath> 
          <xpath expr="//field[(@name='date_order')]" position="after">
-            <field name="internal_reference"/>
+               <field name="internal_reference"/>
          </xpath>      
       </field>
    </record>
