@@ -10,7 +10,7 @@
                 <button name="action_send_payment" string="Send by Email" type="object" class="oe_highlight"/>
             </xpath>
             <xpath expr="//header/button[@name='post']" position="replace">
-                <button name="post" class="oe_highlight" states="draft,invoice send,pre confirm" string="Confirm" type="object" groups="analytic.group_analytic_accounting"/>
+                <button name="post" class="oe_highlight" states="draft,invoice send,pre confirm" string="Confirm" type="object"/>
             </xpath>
             <xpath expr="//header/field[@name='state']" position="replace">
                 <field name="state" widget="statusbar" statusbar_visible="draft,invoice send,pre confirm,posted,reconciled,cancelled"/>

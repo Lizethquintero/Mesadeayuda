@@ -18,6 +18,12 @@ class AccountPayment(models.Model):
     signed_by = fields.Char('Signed By: ', help='Name of the person that signed the SO.', copy=False)
     signed_on = fields.Datetime('Signed On: ', help='Date of the signature.', copy=False)
 
+    def action_draft(self):
+        self.signed_by = False
+        self.signed_on = False
+        self.signature = False
+        return super(AccountPayment, self).action_draft()
+
     def action_send_payment(self):
         # print(dir(self))
         ''' Opens a wizard to compose an email, with relevant mail template loaded by default '''
@@ -85,5 +91,5 @@ class AccountPayment(models.Model):
 
     def _get_report_base_filename(self):
         self.ensure_one()
-        return '%s %s' % ('I', self.name)
+        return '%s %s' % ('Invoice ', self.name)
 

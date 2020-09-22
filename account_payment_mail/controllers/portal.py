@@ -27,6 +27,26 @@ class CustomerPortal(CustomerPortal):
 
         values = self._invoice_get_page_view_values(invoice_sudo, access_token, **kw)
         acquirers = values.get('acquirers')
+
+        if invoice_sudo:
+            now = fields.Date.today().isoformat()
+            session_obj_date = request.session.get('view_quote_%s' % invoice_sudo.id)
+            if isinstance(session_obj_date, date):
+                session_obj_date = session_obj_date.isoformat()
+            if session_obj_date != now and request.env.user.share and access_token:
+                request.session['view_quote_%s' % invoice_sudo.id] = now
+                body = _('Invoice viewed by customer %s') % invoice_sudo.partner_id.name
+                _message_post_helper(
+                    "account.payment",
+                    invoice_sudo.id,
+                    body,
+                    token=invoice_sudo.access_token,
+                    message_type="notification",
+                    subtype="mail.mt_note",
+                    partner_ids=invoice_sudo.sudo().partner_id.ids,
+                )
+
+
         if acquirers:
             country_id = values.get('partner_id') and values.get('partner_id')[0].country_id.id
             values['acq_extra_fees'] = acquirers.get_acquirer_extra_fees(invoice_sudo.amount_residual, invoice_sudo.currency_id, country_id)
@@ -68,11 +88,11 @@ class CustomerPortal(CustomerPortal):
         #     # order_sudo.action_confirm()
         #     invoice._send_order_confirmation_mail()
 
-        # pdf = request.env.ref('sale.action_report_saleorder').sudo().render_qweb_pdf([invoice.id])[0]
-        # _message_post_helper(
-        #     'sale.order', invoice.id, _('Order signed by %s') % (name,),
-        #     attachments=[('%s.pdf' % invoice.name, pdf)],
-        #     **({'token': access_token} if access_token else {}))
+        pdf = request.env.ref('account_payment_mail.account_payment_invoices').sudo().render_qweb_pdf([invoice.id])[0]
+        _message_post_helper(
+            'account.payment', invoice.id, _('Invoice signed by %s') % (name,),
+            attachments=[('%s.pdf' % invoice.name, pdf)],
+            **({'token': access_token} if access_token else {}))
 
         query_string = '&message=sign_ok'
         # if invoice.has_to_be_paid(True):

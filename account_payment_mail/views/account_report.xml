@@ -66,28 +66,32 @@
                         <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
                     </t>
 
-                    <div id="informations" class="row mt32 mb32">
-                        <div class="col-auto mw-100 mb-2" t-if="o.payment_date" name="invoice_date">
-                            <strong>Invoice Date:</strong>
-                            <p class="m-0" t-field="o.payment_date"/>
-                        </div>
-                        <!-- <div class="col-auto mw-100 mb-2" t-if="o.invoice_date_due and o.type == 'out_invoice' and o.state == 'posted'" name="due_date">
-                            <strong>Due Date:</strong>
-                            <p class="m-0" t-field="o.invoice_date_due"/>
-                        </div> -->
-                        <!-- <div class="col-auto mw-100 mb-2" t-if="o.invoice_origin" name="origin">
-                            <strong>Source:</strong>
-                            <p class="m-0" t-field="o.invoice_origin"/>
-                        </div> -->
-                        <div class="col-auto mw-100 mb-2" t-if="o.partner_id.ref" name="customer_code">
-                            <strong>Customer Code:</strong>
-                            <p class="m-0" t-field="o.partner_id.ref"/>
-                        </div>
-                        <div class="col-auto mw-100 mb-2" t-if="o.payment_reference" name="reference">
-                            <strong>Reference:</strong>
-                            <p class="m-0" t-field="o.payment_reference"/>
-                        </div>
+                    <!-- <div id="informations" class="row mt32 mb32"> -->
+                    <div class="col-auto mw-100 mb-2" t-if="o.payment_date" name="invoice_date">
+                        <strong>Invoice Date:</strong>
+                        <p class="m-0" t-field="o.payment_date"/>
                     </div>
+                    <div class="col-auto mw-100 mb-2" t-if="o.communication" name="communication">
+                        <strong>Communication:</strong>
+                        <p class="m-0" t-field="o.communication"/>
+                    </div>
+                    <div class="col-auto mw-100 mb-2" t-if="o.journal_id" name="journal_id">
+                        <strong>Diary:</strong>
+                        <p class="m-0" t-field="o.journal_id"/>
+                    </div>
+                    <!-- <div class="col-auto mw-100 mb-2" t-if="o.invoice_origin" name="origin">
+                        <strong>Source:</strong>
+                        <p class="m-0" t-field="o.invoice_origin"/>
+                    </div> -->
+                    <div class="col-auto mw-100 mb-2" t-if="o.partner_id.ref" name="customer_code">
+                        <strong>Customer Code:</strong>
+                        <p class="m-0" t-field="o.partner_id.ref"/>
+                    </div>
+                    <div class="col-auto mw-100 mb-2" t-if="o.payment_reference" name="reference">
+                        <strong>Reference:</strong>
+                        <p class="m-0" t-field="o.payment_reference"/>
+                    </div>
+                    <!-- </div> -->
 
                     <!-- <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/> -->
 
@@ -209,9 +213,31 @@
                                         </td>
                                     </tr>
                                 </table>
+
+                                <div></div>
+                                <div id="signatire" class="page">
+                                    <span></span>
+                                    <div class="col-auto mw-100 mb-2" t-if="o.signed_by" name="signature">
+                                        <strong>Signed by:</strong>
+                                        <p class="m-0" t-field="o.signed_by"/>
+                                    </div>
+            
+                                    <div class="col-auto mw-100 mb-2" t-if="o.signed_on" name="signed_by">
+                                        <strong>Signed on:</strong>
+                                        <p class="m-0" t-field="o.signed_on"/>
+                                    </div>
+            
+                                    <div class="col-auto mw-100 mb-2" t-if="o.signature" name="signed_date">
+                                        <strong>Signature:</strong>
+                                        <p class="m-0" t-field="o.signature" t-options='{"widget": "image"}'/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    
+
                     <!-- <p t-if="o.type in ('out_invoice', 'in_refund')">
                         Please use the following communication for your payment : <b><span t-field="o.invoice_payment_ref"/></b>
                     </p>
