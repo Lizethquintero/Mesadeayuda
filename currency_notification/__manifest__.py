@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Account Payment Mail",
+    'name': "Mail Notification Currency Change",
 
-    'summary': "Account Payment Mail",
+    'summary': """
+        This module send a mail when the rate in currency rate is changed
+        """,
 
-    'description': "Account Payment Mail",
+    'description': """
+        This module send a mail when the rate in currency rate is changed
+    """,
 
     'author': "Todoo SAS",
-    'contributors': ['Carlos Guio fg@todoo.co '],
+    'contributors': ['Carlos Guio fg@todoo.co'],
     'website': "http://www.todoo.co",
 
     # Categories can be used to filter modules in modules listing
@@ -17,14 +21,13 @@
     'version': '13.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['account','portal'],
+    'depends': ['currency_rate_live'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/account_report.xml',
-        'views/account_payment_view.xml',
+        'data/res_groups.xml',
         'data/mail_data.xml',
-        'views/templates.xml',
+        # 'views/account_move.xml',
     ],
 }
