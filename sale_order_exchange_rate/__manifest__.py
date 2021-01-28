@@ -23,7 +23,7 @@
     'data' : [
          #'security/ir.model.access.csv',
          'views/account_move.xml',
-        #  'views/sales.xml',
+         'views/sales.xml',
     ],
     'images': [
         "static/description/logo.png"
