@@ -5,9 +5,6 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
-            <field name="currency_id" position="after">
-
-            </field>
             <xpath expr="//field[@name='currency_id']" position="after">
                 <field name="currency_rate_raw" readonly="True" string="TRM del Día" force_save="True"/>
                 <field name="so_exchange_allow_ok" invisible="True"/>    
