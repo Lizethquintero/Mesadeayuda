@@ -95,6 +95,7 @@ class SaleOrder(models.Model):
                 'sale_order_id': self.id,
                 'invoice_has_exchange_rate': True,
                 'invoice_exchange_rate': self.so_exchange_rate,
+                'currency_rate_raw': self.currency_rate_raw,
             })
         return res
 

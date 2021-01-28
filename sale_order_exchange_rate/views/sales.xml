@@ -9,7 +9,7 @@
 
             </field>
             <xpath expr="//field[@name='currency_id']" position="after">
-                <field name="currency_rate_raw" readonly="True" string="TRM del Día"/>
+                <field name="currency_rate_raw" readonly="True" string="TRM del Día" force_save="True"/>
                 <field name="so_exchange_allow_ok" invisible="True"/>    
                 <field
                     name="so_has_exchange_rate"
