@@ -95,7 +95,9 @@ class SaleOrder(models.Model):
                 'invoice_has_exchange_rate': True,
                 'invoice_exchange_rate': self.so_exchange_rate,
             })
-        res.update({'currency_rate_raw': self.currency_rate_raw})
+        res.update({
+            'sale_order_id': self.id,
+            'currency_rate_raw': self.currency_rate_raw})
         return res
 
 
