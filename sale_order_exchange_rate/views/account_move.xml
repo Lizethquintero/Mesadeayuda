@@ -32,7 +32,7 @@
                 <field name="invoice_has_exchange_rate" groups="base.group_multi_currency"
                         attrs="{'readonly': [('sale_order_id','!=', False)], 'invisible': [('type', 'not in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]}"/>
                 <field name="invoice_exchange_rate" groups="base.group_multi_currency"
-                        attrs="{'invisible': [('invoice_has_exchange_rate','=',False)],'readonly': [('sale_order_id','not in', False)],}}"/>
+                        attrs="{'invisible': [('invoice_has_exchange_rate','=',False)],'readonly': [('sale_order_id','not in', False)]}"/>
             </xpath>
             <xpath expr="//field[@name='amount_total']" position="after">
                 <field name="amount_total_exchange_rate" groups="base.group_multi_currency"
