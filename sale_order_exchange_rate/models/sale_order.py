@@ -92,11 +92,10 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self)._prepare_invoice()
         if self.so_has_exchange_rate:
             res.update({
-                'sale_order_id': self.id,
                 'invoice_has_exchange_rate': True,
                 'invoice_exchange_rate': self.so_exchange_rate,
-                'currency_rate_raw': self.currency_rate_raw,
             })
+        res.update({'currency_rate_raw': self.currency_rate_raw})
         return res
 
 
