@@ -25,9 +25,9 @@ class SaleOrder(models.Model):
     @api.depends('so_has_exchange_rate','amount_total')
     def _amount_all_with_exchange_rate(self):
         for rec in self:
-            if rec.so_has_exchange_rate and rec.so_exchange_rate > 1:
+            if rec.so_has_exchange_rate and rec.so_exchange_rate > 0:
                 rec.amount_total_exchange_rate = rec.amount_total * rec.so_exchange_rate
-            elif not rec.so_has_exchange_rate and rec.currency_rate_raw > 1:
+            elif not rec.so_has_exchange_rate and rec.currency_rate_raw > 0:
                 rec.amount_total_exchange_rate = rec.amount_total * rec.currency_rate_raw
             else:
                 rec.amount_total_exchange_rate = 0.0
@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
     def _compute_currency_rate(self):
         super(SaleOrder, self)._compute_currency_rate()
         for order in self:
-            if order.so_has_exchange_rate and order.so_exchange_rate > 1:
+            if order.so_has_exchange_rate and order.so_exchange_rate > 0:
                 if not order.company_id:
                     order.currency_rate = 1/order.so_exchange_rate or 1.0
                     continue

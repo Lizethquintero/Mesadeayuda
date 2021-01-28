@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from datetime import datetime
 
 
 class AccountMove(models.Model):
@@ -19,9 +20,9 @@ class AccountMove(models.Model):
     @api.depends('invoice_has_exchange_rate','amount_total')
     def _amount_all_with_exchange_rate(self):
         for rec in self:
-            if rec.invoice_has_exchange_rate and rec.invoice_exchange_rate > 1:
+            if rec.invoice_has_exchange_rate and rec.invoice_exchange_rate > 0:
                 amount_total_exchange_rate = rec.amount_total * rec.invoice_exchange_rate
-            elif not rec.invoice_has_exchange_rate and rec.currency_rate_raw > 1:
+            elif not rec.invoice_has_exchange_rate and rec.currency_rate_raw > 0:
                 amount_total_exchange_rate = rec.amount_total * rec.currency_rate_raw
             else:
                 amount_total_exchange_rate = 0.0
@@ -50,6 +51,7 @@ class AccountMove(models.Model):
 
     @api.onchange('currency_id')
     def _onchange_currency_id(self):
+        actual_raw = self.currency_rate_raw
         if not self.currency_id:
             self.currency_rate_raw = 1
             self.invoice_has_exchange_rate = False
@@ -71,6 +73,17 @@ class AccountMove(models.Model):
             currency_rates = dict(self._cr.fetchall())
             rate = currency_rates.get(self.currency_id.id) or 1.0
             self.currency_rate_raw = 1 / rate if rate > 0 else 1
+
+        if self.type == 'out_invoice':
+            for line in self.invoice_line_ids:
+                if self.invoice_has_exchange_rate:
+                    line.price_unit = line.price_unit * self.invoice_exchange_rate/actual_raw
+                else:
+                    line.price_unit = line.price_unit * self.currency_rate_raw/actual_raw
+                line._onchange_price_subtotal()
+                
+
+
 
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4
