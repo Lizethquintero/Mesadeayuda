@@ -76,11 +76,14 @@ class AccountMove(models.Model):
 
         if self.type == 'out_invoice':
             for line in self.invoice_line_ids:
-                if self.invoice_has_exchange_rate:
+                if self.invoice_has_exchange_rate and actual_raw != 0:
                     line.price_unit = line.price_unit * self.invoice_exchange_rate/actual_raw
                 else:
                     line.price_unit = line.price_unit * self.currency_rate_raw/actual_raw
-                line._onchange_price_subtotal()
+                line._onchange_mark_recompute_taxes()
+            self._onchange_currency()   
+            # self._compute_invoice_taxes_by_group()             
+                # line._recompute_debit_credit_from_amount_currency()
                 
 
 
