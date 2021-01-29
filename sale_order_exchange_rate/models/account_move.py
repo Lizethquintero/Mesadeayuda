@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api
 from datetime import datetime
+from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
@@ -51,7 +52,6 @@ class AccountMove(models.Model):
 
     @api.onchange('currency_id')
     def _onchange_currency_id(self):
-        actual_raw = self.currency_rate_raw if not self.invoice_has_exchange_rate else self.invoice_exchange_rate
         if not self.currency_id:
             self.currency_rate_raw = 1
             self.invoice_has_exchange_rate = False
@@ -74,14 +74,17 @@ class AccountMove(models.Model):
             rate = currency_rates.get(self.currency_id.id) or 1.0
             self.currency_rate_raw = 1 / rate if rate > 0 else 1
 
-        if self.type == 'out_invoice':
+        if self.type == 'out_invoice' and self.sale_order_id and self.currency_id.id in (self.company_id.currency_id.id, self.sale_order_id.currency_id.id):
             for line in self.invoice_line_ids:
-                if self.invoice_has_exchange_rate and actual_raw != 0:
-                    line.price_unit = line.price_unit * self.invoice_exchange_rate/actual_raw
+                if self.invoice_has_exchange_rate:
+                    convertion_factor = self.sale_order_id.invoice_exchange_rate if self.currency_id == self.company_id.currency_id else (1/self.sale_order_id.invoice_exchange_rate)
                 else:
-                    line.price_unit = line.price_unit * self.currency_rate_raw/actual_raw
+                    convertion_factor = self.sale_order_id.currency_rate_raw if self.currency_id == self.company_id.currency_id else (1/self.sale_order_id.currency_rate_raw)
+                line.price_unit = line.price_unit * convertion_factor
                 line._onchange_mark_recompute_taxes()
             self._onchange_currency()   
+        elif self.type == 'out_invoice' and self.sale_order_id and self.currency_id.id not in (self.company_id.currency_id.id, self.sale_order_id.currency_id.id):
+            raise UserError(('You cannot change the currency to a different one than the purchase order or the company.'))
             # self._compute_invoice_taxes_by_group()             
                 # line._recompute_debit_credit_from_amount_currency()
                 
