@@ -51,7 +51,7 @@ class AccountMove(models.Model):
 
     @api.onchange('currency_id')
     def _onchange_currency_id(self):
-        actual_raw = self.currency_rate_raw
+        actual_raw = self.currency_rate_raw if not self.invoice_has_exchange_rate else self.invoice_exchange_rate
         if not self.currency_id:
             self.currency_rate_raw = 1
             self.invoice_has_exchange_rate = False
