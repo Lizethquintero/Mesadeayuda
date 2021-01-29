@@ -77,7 +77,7 @@ class AccountMove(models.Model):
         if self.type == 'out_invoice' and self.sale_order_id and self.currency_id.id in (self.company_id.currency_id.id, self.sale_order_id.currency_id.id):
             for line in self.invoice_line_ids:
                 if self.invoice_has_exchange_rate:
-                    convertion_factor = self.sale_order_id.invoice_exchange_rate if self.currency_id == self.company_id.currency_id else (1/self.sale_order_id.invoice_exchange_rate)
+                    convertion_factor = self.sale_order_id.so_exchange_rate if self.currency_id == self.company_id.currency_id else (1/self.sale_order_id.so_exchange_rate)
                 else:
                     convertion_factor = self.sale_order_id.currency_rate_raw if self.currency_id == self.company_id.currency_id else (1/self.sale_order_id.currency_rate_raw)
                 line.price_unit = line.price_unit * convertion_factor
